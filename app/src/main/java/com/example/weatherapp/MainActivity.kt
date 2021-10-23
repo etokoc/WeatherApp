@@ -1,18 +1,18 @@
 package com.example.weatherapp
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.weatherapp.RecylerView.RecylerViewAdapter
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import retrofit2.Call
 import retrofit2.Callback
@@ -22,14 +22,27 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 class MainActivity : AppCompatActivity() {
+    lateinit var fusedLocationClient: FusedLocationProviderClient
     private val BASE_URL = "https://www.metaweather.com"
-    private var list: ArrayList<WeatherModel>? = null
+    private lateinit var cs: String
+    lateinit var gandalf: String
+    var location: Location = Location("")
+    var list: ArrayList<WeatherModel>? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        // loadData()
+
+
         getPermission()
-        var fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        //val data  = CoordinateSystem(this.applicationContext)
+        getLocation()
+
+//        Log.i("akif", "onCreate: " +)
+    }
+
+    fun getLocation() {
+        fusedLocationClient =
+            LocationServices.getFusedLocationProviderClient(this.applicationContext)
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -38,27 +51,18 @@ class MainActivity : AppCompatActivity() {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-        }
-        fusedLocationClient.lastLocation.addOnCompleteListener {
-            var location = it.result
-            if (location != null){
-              var txt1 = findViewById<TextView>(R.id.txt)
-              var txt2 = findViewById<TextView>(R.id.textView)
-               txt1.setText("altitude: "+location.latitude)
-               txt2.setText("longtude: "+location.longitude)
+            requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), 123)
+        } else {
+            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+
+                gandalf = location.latitude.toString()
+                this.cs = location.latitude.toString() + "," + location.longitude
+                Log.i("veri", "fonksiyon içi: " + gandalf)
+                getWoeid(cs)
             }
         }
-        getWoeid()
-
     }
 
-    private fun isLocationEnabled(): Boolean {
-        var locationManager: LocationManager =
-            getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-            LocationManager.NETWORK_PROVIDER
-        )
-    }
 
     private fun getPermission() {
         try {
@@ -79,13 +83,13 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun loadData() {
+    fun loadData(woeidID: String) {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val service = retrofit.create(WeatherApi::class.java)
-        val call = service.queryWeather("2343732", "2021/10/22")
+        val call = service.queryWeather(woeidID, "2021/10/22")
 
         call.enqueue(object : Callback<List<WeatherModel>> {
             override fun onResponse(
@@ -95,8 +99,10 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     response.body()?.let {
                         list = ArrayList(it)
-                        Toast.makeText(this@MainActivity, "" + list!!.get(0), Toast.LENGTH_SHORT)
-                            .show()
+                        val recylerView: RecyclerView = findViewById(R.id.recyclerView)
+                        val recylerViewAdapter = RecylerViewAdapter(list!!,"asd")
+                        recylerView.adapter = recylerViewAdapter
+                        recylerView.layoutManager = LinearLayoutManager(this@MainActivity)
                         for (x in list!!) {
                             Log.i(
                                 "response",
@@ -104,14 +110,7 @@ class MainActivity : AppCompatActivity() {
                             )
                         }
                     }
-
-                    if (response.body() == null) {
-                        Log.i("response", "response boş: ")
-                    }
-
-
-                } else
-                    Log.i("response", "Cevap Yok!!: " + (response.body()?.get(0)))
+                }
             }
 
             override fun onFailure(call: Call<List<WeatherModel>>, t: Throwable) {
@@ -121,13 +120,13 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun getWoeid() {
+    fun getWoeid(woeidD: String) {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val service = retrofit.create(WeatherApi::class.java)
-        val call = service.getData("30,0")
+        val call = service.getData(woeidD)
 
         call.enqueue(object : Callback<List<WeatherModel>> {
             override fun onResponse(
@@ -137,23 +136,15 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     response.body()?.let {
                         list = ArrayList(it)
-                        Toast.makeText(this@MainActivity, "" + list!!.get(0), Toast.LENGTH_SHORT)
-                            .show()
                         for (x in list!!) {
-                            Log.i(
-                                "response",
-                                x.woeid + "" + x.title
-                            )
+//                            Log.i("veri", "woeid: " + x.woeid + " title" + x.title + " " + x.distance)
+//                            loadData(x.woeid)
+
+                            loadData(x.woeid)
                         }
+                        println("" + list!!.get(0).title + " woeid:" + list!!.get(0).woeid)
                     }
-
-                    if (response.body() == null) {
-                        Log.i("response", "response boş: ")
-                    }
-
-
-                } else
-                    Log.i("response", "Cevap Yok!!: " + (response.body()?.get(0)))
+                }
             }
 
             override fun onFailure(call: Call<List<WeatherModel>>, t: Throwable) {
