@@ -1,18 +1,25 @@
 package com.example.weatherapp
 
-import android.content.ContentProviderOperation.newCall
-import androidx.appcompat.app.AppCompatActivity
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.google.android.gms.location.LocationServices
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.IOException
+
 
 class MainActivity : AppCompatActivity() {
     private val BASE_URL = "https://www.metaweather.com"
@@ -21,9 +28,54 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         // loadData()
-
+        getPermission()
+        var fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+        }
+        fusedLocationClient.lastLocation.addOnCompleteListener {
+            var location = it.result
+            if (location != null){
+              var txt1 = findViewById<TextView>(R.id.txt)
+              var txt2 = findViewById<TextView>(R.id.textView)
+               txt1.setText("altitude: "+location.latitude)
+               txt2.setText("longtude: "+location.longitude)
+            }
+        }
         getWoeid()
 
+    }
+
+    private fun isLocationEnabled(): Boolean {
+        var locationManager: LocationManager =
+            getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
+            LocationManager.NETWORK_PROVIDER
+        )
+    }
+
+    private fun getPermission() {
+        try {
+            if (ContextCompat.checkSelfPermission(
+                    applicationContext,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    101
+                )
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
 
@@ -75,7 +127,7 @@ class MainActivity : AppCompatActivity() {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val service = retrofit.create(WeatherApi::class.java)
-        val call = service.getData("36.96,-122.02")
+        val call = service.getData("30,0")
 
         call.enqueue(object : Callback<List<WeatherModel>> {
             override fun onResponse(
@@ -90,7 +142,7 @@ class MainActivity : AppCompatActivity() {
                         for (x in list!!) {
                             Log.i(
                                 "response",
-                                x.woeid+""+x.title
+                                x.woeid + "" + x.title
                             )
                         }
                     }
