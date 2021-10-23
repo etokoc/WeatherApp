@@ -13,8 +13,8 @@ interface WeatherApi {
 //        apiStr = "api/location/search/?lattlong=36.96,-122.02"
 //    }
 
-//    @GET("api/location/search/?")
-//    fun getData(@Query("min_temp") lat: String): Call<List<WeatherModel>>
+    @GET("api/location/search/?")
+    fun getData(@Query("lattlong") lat: String): Call<List<WeatherModel>>
 
     @GET("/api/location/{woeid}/{date}/")
     fun queryWeather(
