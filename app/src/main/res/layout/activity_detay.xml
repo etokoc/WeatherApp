@@ -16,6 +16,8 @@
         android:text="Ankara"
         android:textSize="46sp"
         app:layout_constraintEnd_toStartOf="@+id/detay_image"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
@@ -32,10 +34,11 @@
         android:id="@+id/detay_txt_max"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="117dp"
+        android:layout_marginTop="120dp"
         android:text="18C"
-        android:textSize="24sp"
+        android:textSize="34sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.121"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -43,9 +46,11 @@
         android:id="@+id/detay_txt_min"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="16dp"
         android:text="9 C"
-        android:textSize="24sp"
+        android:textSize="34sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.009"
         app:layout_constraintStart_toStartOf="@+id/detay_txt_max"
         app:layout_constraintTop_toBottomOf="@+id/detay_txt_max" />
 </androidx.constraintlayout.widget.ConstraintLayout>

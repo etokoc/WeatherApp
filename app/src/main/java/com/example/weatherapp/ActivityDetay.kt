@@ -18,7 +18,6 @@ import kotlin.math.log
 
 class ActivityDetay : AppCompatActivity() {
     private val BASE_URL = "https://www.metaweather.com"
-    var list: ArrayList<Example>? = null
     lateinit var binding: ActivityDetayBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,6 +50,8 @@ class ActivityDetay : AppCompatActivity() {
                         for (x in detay!!) {
                             Log.i("response", "" + x.theTemp)
                         }
+                        binding.detayTxtMax.setText(detay.get(0).maxTemp!!.toDouble().toInt().toString())
+                        binding.detayTxtMin.setText(detay.get(0).minTemp!!.toDouble().toInt().toString())
                     }
                 }
 
