@@ -1,25 +1,29 @@
 package com.example.weatherapp.RecylerView
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.R
 import com.example.weatherapp.WeatherModel
 
-class RecylerViewAdapter(list: ArrayList<WeatherModel>, title: String) :
+class RecylerViewAdapter(list: ArrayList<WeatherModel>, title: String, context: Context) :
     RecyclerView.Adapter<RecylerViewAdapter.MyViewHolder>() {
     var list: List<WeatherModel> = list
 
     init {
         RecylerViewAdapter.title = title
-        RecylerViewAdapter.list=list
+        RecylerViewAdapter.list = list
+        RecylerViewAdapter.context = context
     }
 
     companion object {
         lateinit var title: String
         lateinit var list: List<WeatherModel>
+        lateinit var context: Context
 
     }
 
@@ -33,16 +37,21 @@ class RecylerViewAdapter(list: ArrayList<WeatherModel>, title: String) :
             row_max.setText(item.max_temp)
             row_min.setText(item.min_temp)
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view: View =
             LayoutInflater.from(parent.context).inflate(R.layout.row_design_menu, parent, false)
+
         return MyViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.binding(list.get(position))
+        holder.itemView.setOnClickListener {
+            Toast.makeText(context,"Tıklandı"+" "+ list.get(position).title,Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun getItemCount(): Int {

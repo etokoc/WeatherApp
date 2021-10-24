@@ -144,7 +144,7 @@ class MainActivity : AppCompatActivity() {
                         list = ArrayList(it)
                         for (x in list!!) {
                             val recylerView: RecyclerView = findViewById(R.id.recyclerView)
-                            val recylerViewAdapter = RecylerViewAdapter(list!!, x.title + "")
+                            val recylerViewAdapter = RecylerViewAdapter(list!!, x.title + "",this@MainActivity.applicationContext)
                             recylerView.adapter = recylerViewAdapter
                             recylerView.layoutManager = LinearLayoutManager(this@MainActivity)
                         }
