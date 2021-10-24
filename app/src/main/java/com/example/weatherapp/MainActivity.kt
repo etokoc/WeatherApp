@@ -58,14 +58,16 @@ class MainActivity : AppCompatActivity() {
             requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), 123)
         } else {
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-                gandalf = location.latitude.toString()
                 this.cs = location.latitude.toString() + "," + location.longitude
-                Log.i("veri", "fonksiyon içi: " + gandalf)
+                Log.i(
+                    "veri",
+                    "fonksiyon içi: " + location.latitude.toString() + "," + location.longitude
+                )
                 Log.i("cs", "cs: " + cs)
                 getWoeid(cs)
             }
         }
-        Log.i("gandalf", "getLocation: " + gandalf)
+        Log.i("gandalf", "getLocation: " + location.latitude.toString() + "," + location.longitude)
     }
 
 
@@ -105,11 +107,7 @@ class MainActivity : AppCompatActivity() {
                     response.body()?.let {
                         list = ArrayList(it)
                         for (x in list!!) {
-                            val recylerView: RecyclerView = findViewById(R.id.recyclerView)
-                            val recylerViewAdapter =
-                                RecylerViewAdapter(list!!, x.weather_state_name + "")
-                            recylerView.adapter = recylerViewAdapter
-                            recylerView.layoutManager = LinearLayoutManager(this@MainActivity)
+
 
                             Log.i(
                                 "response",
@@ -126,10 +124,6 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
-    }
-
-    companion object {
-        var gandalf: String = ""
     }
 
     fun getWoeid(woeidD: String) {
@@ -149,23 +143,21 @@ class MainActivity : AppCompatActivity() {
                     response.body()?.let {
                         list = ArrayList(it)
                         for (x in list!!) {
-//                            Log.i("veri", "woeid: " + x.woeid + " title" + x.title + " " + x.distance)
-//                            loadData(x.woeid)
-//                            Log.i(
-//                                "woeid alma",
-//                                x.title + " woeid:" + x.woeid + " distance: " + x.distance
-//                            )
-
+                            val recylerView: RecyclerView = findViewById(R.id.recyclerView)
+                            val recylerViewAdapter = RecylerViewAdapter(list!!, x.title + "")
+                            recylerView.adapter = recylerViewAdapter
+                            recylerView.layoutManager = LinearLayoutManager(this@MainActivity)
                         }
                         Log.i(
                             "woeid alma",
-                            list!!.get(0).title + " woeid:" + list!!.get(0).woeid + " distance: " + list!!.get(0).distance
+                            list!!.get(0).title + " woeid:" + list!!.get(0).woeid + " distance: " + list!!.get(
+                                0
+                            ).distance
                         )
                         loadData(list!!.get(0).woeid)
                     }
                 }
-                gandalf = list!!.get(0).woeid
-                Log.i("gandalf", "woeid: " + gandalf)
+                Log.i("gandalf", "woeid: " + list!!.get(0).woeid)
             }
 
             override fun onFailure(call: Call<List<WeatherModel>>, t: Throwable) {

@@ -11,11 +11,16 @@ import com.example.weatherapp.WeatherModel
 class RecylerViewAdapter(list: ArrayList<WeatherModel>, title: String) :
     RecyclerView.Adapter<RecylerViewAdapter.MyViewHolder>() {
     var list: List<WeatherModel> = list
+
     init {
         RecylerViewAdapter.title = title
-}
-    companion object{
-        lateinit var title:String
+        RecylerViewAdapter.list=list
+    }
+
+    companion object {
+        lateinit var title: String
+        lateinit var list: List<WeatherModel>
+
     }
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -24,7 +29,7 @@ class RecylerViewAdapter(list: ArrayList<WeatherModel>, title: String) :
         val row_min = itemView.findViewById<TextView>(R.id.row_min)
 
         fun binding(item: WeatherModel) {
-            row_header.setText(""+title)
+            row_header.setText("" + item.title)
             row_max.setText(item.max_temp)
             row_min.setText(item.min_temp)
         }
