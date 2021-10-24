@@ -1,12 +1,14 @@
 package com.example.weatherapp.RecylerView
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.weatherapp.ActivityDetay
 import com.example.weatherapp.R
 import com.example.weatherapp.WeatherModel
 
@@ -50,7 +52,11 @@ class RecylerViewAdapter(list: ArrayList<WeatherModel>, title: String, context: 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.binding(list.get(position))
         holder.itemView.setOnClickListener {
-            Toast.makeText(context,"Tıklandı"+" "+ list.get(position).title,Toast.LENGTH_SHORT).show()
+            Toast.makeText(context,"Tıklandı"+" "+ list.get(position).title+" "+list.get(position).max_temp,Toast.LENGTH_SHORT).show()
+            val intent = Intent(it.context,ActivityDetay::class.java)
+            intent.putExtra("title",list.get(position).title)
+            intent.putExtra("temp",list.get(position).max_temp)
+            it.context.startActivity(intent)
         }
     }
 
