@@ -3,20 +3,15 @@ package com.example.weatherapp
 import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.location.LocationManagerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.RecylerView.RecylerViewAdapter
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import retrofit2.Call
 import retrofit2.Callback
@@ -58,7 +53,7 @@ class MainActivity : AppCompatActivity() {
             requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), 123)
         } else {
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-                this.cs = location.latitude.toString() + "," + location.longitude
+                cs = location.latitude.toString() + "," + location.longitude
                 Log.i(
                     "veri",
                     "fonksiyon içi: " + location.latitude.toString() + "," + location.longitude
@@ -90,41 +85,41 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun loadData(woeidID: String) {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        val service = retrofit.create(WeatherApi::class.java)
-        val call = service.queryWeather(woeidID, "2021/10/22")
-
-        call.enqueue(object : Callback<List<WeatherModel>> {
-            override fun onResponse(
-                call: Call<List<WeatherModel>>,
-                response: Response<List<WeatherModel>>
-            ) {
-                if (response.isSuccessful) {
-                    response.body()?.let {
-                        list = ArrayList(it)
-                        for (x in list!!) {
-
-
-                            Log.i(
-                                "response",
-                                x.id + " " + x.weather_state_name + " " + x.max_temp + " " + x.min_temp
-                            )
-                        }
-                    }
-                }
-
-            }
-
-            override fun onFailure(call: Call<List<WeatherModel>>, t: Throwable) {
-                t.printStackTrace()
-            }
-
-        })
-    }
+//    fun loadData(woeidID: String) {
+//        val retrofit = Retrofit.Builder()
+//            .baseUrl(BASE_URL)
+//            .addConverterFactory(GsonConverterFactory.create())
+//            .build()
+//        val service = retrofit.create(WeatherApi::class.java)
+//        val call = service.queryWeather(woeidID, "2021/10/22")
+//
+//        call.enqueue(object : Callback<List<WeatherModel>> {
+//            override fun onResponse(
+//                call: Call<List<WeatherModel>>,
+//                response: Response<List<WeatherModel>>
+//            ) {
+//                if (response.isSuccessful) {
+//                    response.body()?.let {
+//                        list = ArrayList(it)
+//                        for (x in list!!) {
+//
+//
+//                            Log.i(
+//                                "response",
+//                                x.id + " " + x.weather_state_name + " " + x.max_temp + " " + x.min_temp
+//                            )
+//                        }
+//                    }
+//                }
+//
+//            }
+//
+//            override fun onFailure(call: Call<List<WeatherModel>>, t: Throwable) {
+//                t.printStackTrace()
+//            }
+//
+//        })
+//    }
 
     fun getWoeid(woeidD: String) {
         val retrofit = Retrofit.Builder()
@@ -144,17 +139,19 @@ class MainActivity : AppCompatActivity() {
                         list = ArrayList(it)
                         for (x in list!!) {
                             val recylerView: RecyclerView = findViewById(R.id.recyclerView)
-                            val recylerViewAdapter = RecylerViewAdapter(list!!, x.title + "",this@MainActivity.applicationContext)
+                            val recylerViewAdapter = RecylerViewAdapter(
+                                list!!,
+                                x.title + "",
+                                this@MainActivity.applicationContext
+                            )
                             recylerView.adapter = recylerViewAdapter
                             recylerView.layoutManager = LinearLayoutManager(this@MainActivity)
                         }
                         Log.i(
                             "woeid alma",
-                            list!!.get(0).title + " woeid:" + list!!.get(0).woeid + " distance: " + list!!.get(
-                                0
-                            ).distance
+                            list!!.get(0).title + " woeid:" + list!!.get(0).woeid + " distance: " + list!!.get(0).distance+" max:"+list!!.get(0).max_temp
                         )
-                        loadData(list!!.get(0).woeid)
+//                        loadData(list!!.get(0).woeid)
                     }
                 }
                 Log.i("gandalf", "woeid: " + list!!.get(0).woeid)

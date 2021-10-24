@@ -35,7 +35,7 @@ class RecylerViewAdapter(list: ArrayList<WeatherModel>, title: String, context: 
         val row_min = itemView.findViewById<TextView>(R.id.row_min)
 
         fun binding(item: WeatherModel) {
-            row_header.setText("" + item.title)
+            row_header.setText(item.title)
             row_max.setText(item.max_temp)
             row_min.setText(item.min_temp)
         }
@@ -56,6 +56,7 @@ class RecylerViewAdapter(list: ArrayList<WeatherModel>, title: String, context: 
             val intent = Intent(it.context,ActivityDetay::class.java)
             intent.putExtra("title",list.get(position).title)
             intent.putExtra("temp",list.get(position).max_temp)
+            intent.putExtra("woeid",list.get(position).woeid)
             it.context.startActivity(intent)
         }
     }
