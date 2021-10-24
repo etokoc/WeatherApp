@@ -29,7 +29,7 @@ class ActivityDetay : AppCompatActivity() {
 
         binding.detayTxtTitle.setText(intent.extras!!.get("title").toString())
         binding.detayTxtMax.setText(intent.extras!!.get("temp").toString())
-        loadData("2344116")
+        loadData(intent.extras!!.get("woeid").toString())
     }
 
     fun loadData(woeidID: String) {
