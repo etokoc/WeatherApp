@@ -3,16 +3,20 @@ package com.example.weatherapp
 import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.location.LocationManagerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.RecylerView.RecylerViewAdapter
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import retrofit2.Call
 import retrofit2.Callback
@@ -24,8 +28,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MainActivity : AppCompatActivity() {
     lateinit var fusedLocationClient: FusedLocationProviderClient
     private val BASE_URL = "https://www.metaweather.com"
+
     private lateinit var cs: String
-    lateinit var gandalf: String
     var location: Location = Location("")
     var list: ArrayList<WeatherModel>? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,13 +58,14 @@ class MainActivity : AppCompatActivity() {
             requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), 123)
         } else {
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-
                 gandalf = location.latitude.toString()
                 this.cs = location.latitude.toString() + "," + location.longitude
                 Log.i("veri", "fonksiyon içi: " + gandalf)
+                Log.i("cs", "cs: " + cs)
                 getWoeid(cs)
             }
         }
+        Log.i("gandalf", "getLocation: " + gandalf)
     }
 
 
@@ -99,11 +104,13 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     response.body()?.let {
                         list = ArrayList(it)
-                        val recylerView: RecyclerView = findViewById(R.id.recyclerView)
-                        val recylerViewAdapter = RecylerViewAdapter(list!!,"asd")
-                        recylerView.adapter = recylerViewAdapter
-                        recylerView.layoutManager = LinearLayoutManager(this@MainActivity)
                         for (x in list!!) {
+                            val recylerView: RecyclerView = findViewById(R.id.recyclerView)
+                            val recylerViewAdapter =
+                                RecylerViewAdapter(list!!, x.weather_state_name + "")
+                            recylerView.adapter = recylerViewAdapter
+                            recylerView.layoutManager = LinearLayoutManager(this@MainActivity)
+
                             Log.i(
                                 "response",
                                 x.id + " " + x.weather_state_name + " " + x.max_temp + " " + x.min_temp
@@ -111,6 +118,7 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                 }
+
             }
 
             override fun onFailure(call: Call<List<WeatherModel>>, t: Throwable) {
@@ -118,6 +126,10 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    companion object {
+        var gandalf: String = ""
     }
 
     fun getWoeid(woeidD: String) {
@@ -139,12 +151,21 @@ class MainActivity : AppCompatActivity() {
                         for (x in list!!) {
 //                            Log.i("veri", "woeid: " + x.woeid + " title" + x.title + " " + x.distance)
 //                            loadData(x.woeid)
+//                            Log.i(
+//                                "woeid alma",
+//                                x.title + " woeid:" + x.woeid + " distance: " + x.distance
+//                            )
 
-                            loadData(x.woeid)
                         }
-                        println("" + list!!.get(0).title + " woeid:" + list!!.get(0).woeid)
+                        Log.i(
+                            "woeid alma",
+                            list!!.get(0).title + " woeid:" + list!!.get(0).woeid + " distance: " + list!!.get(0).distance
+                        )
+                        loadData(list!!.get(0).woeid)
                     }
                 }
+                gandalf = list!!.get(0).woeid
+                Log.i("gandalf", "woeid: " + gandalf)
             }
 
             override fun onFailure(call: Call<List<WeatherModel>>, t: Throwable) {
