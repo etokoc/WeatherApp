@@ -10,20 +10,25 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.ActivityDetay
 import com.example.weatherapp.R
+import com.example.weatherapp.Str
 import com.example.weatherapp.WeatherModel
 
-class RecylerViewAdapter(list: ArrayList<WeatherModel>, title: String, context: Context) :
+class RecylerViewAdapter(list: ArrayList<WeatherModel>, title: String,/*maxTemp:String,minTemp:String,*/ context: Context) :
     RecyclerView.Adapter<RecylerViewAdapter.MyViewHolder>() {
     var list: List<WeatherModel> = list
 
     init {
         RecylerViewAdapter.title = title
+//        RecylerViewAdapter.maxTemp = maxTemp
+//        RecylerViewAdapter.minTemp = minTemp
         RecylerViewAdapter.list = list
         RecylerViewAdapter.context = context
     }
 
     companion object {
         lateinit var title: String
+//        lateinit var maxTemp: String
+//        lateinit var minTemp: String
         lateinit var list: List<WeatherModel>
         lateinit var context: Context
 
@@ -36,8 +41,8 @@ class RecylerViewAdapter(list: ArrayList<WeatherModel>, title: String, context: 
 
         fun binding(item: WeatherModel) {
             row_header.setText(item.title)
-            row_max.setText(item.max_temp)
-            row_min.setText(item.min_temp)
+            row_max.setText(item.max_temp+"max")
+            row_min.setText(item.min_temp+"min")
         }
 
     }
