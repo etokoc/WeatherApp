@@ -60,16 +60,16 @@ class ActivityDetay : AppCompatActivity() {
                             detay.get(0).theTemp!!.toDouble().toInt().toString()
                         )
                         when (detay.get(0).weatherStateAbbr) {
-                            "c" -> Log.i("rasim", "Güneşli")
-                            "sn" -> Log.i("rasim", "Karlı")
-                            "sl" -> Log.i("rasim", "Karla Karışık Yağmur")
-                            "h" -> Log.i("rasim", "Dolu Yağışı")
-                            "t" -> Log.i("rasim", "Fırtınalı")
-                            "hr" -> Log.i("rasim", "Sağanak Yağışlı")
-                            "lr" -> Log.i("rasim", "Hafif Yağmurlu")
-                            "s" -> Log.i("rasim", "Hafif Sağanak Yağışlı")
-                            "hc" -> Log.i("rasim", "Bulutlu")
-                            "lc" -> Log.i("rasim", "Parçalı Bulutlu")
+                            "c" -> binding.imageView3.setImageResource(R.drawable.c)
+                            "sn" -> binding.imageView3.setImageResource(R.drawable.sn)
+                            "sl" -> binding.imageView3.setImageResource(R.drawable.sl)
+                            "h" -> binding.imageView3.setImageResource(R.drawable.h)
+                            "t" -> binding.imageView3.setImageResource(R.drawable.t)
+                            "hr" -> binding.imageView3.setImageResource(R.drawable.hr)
+                            "lr" -> binding.imageView3.setImageResource(R.drawable.lr)
+                            "s" -> binding.imageView3.setImageResource(R.drawable.s)
+                            "hc" -> binding.imageView3.setImageResource(R.drawable.hc)
+                            "lc" -> binding.imageView3.setImageResource(R.drawable.lc)
                             else -> ""
                         }
                     }
