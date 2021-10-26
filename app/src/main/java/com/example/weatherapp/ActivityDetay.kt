@@ -47,22 +47,22 @@ class ActivityDetay : AppCompatActivity() {
                 call: Call<Example>,
                 response: Response<Example>
             ) {
-                var list: List<Str>
                 if (response.isSuccessful) {
                     response.body()?.let {
-                        val detay: List<Str>? = it.consolidatedWeather
+                        val detay: MutableList<Str>? = it.consolidatedWeather as MutableList<Str>?
+                        detay!!.removeAt(0)
                         var recylerViewDetay = findViewById<RecyclerView>(R.id.recylerViewDetay)
                         recylerViewDetay.layoutManager = LinearLayoutManager(this@ActivityDetay)
                         recylerViewDetay.adapter =
                             RecylerViewAdapterDetay(detay as ArrayList<Str>, this@ActivityDetay)
                         binding.detayTxtMax.setText(
-                            detay.get(0).maxTemp!!.toDouble().toInt().toString()
+                            detay.get(0).maxTemp!!.toDouble().toInt().toString() + "°"
                         )
                         binding.detayTxtMin.setText(
-                            detay.get(0).minTemp!!.toDouble().toInt().toString()
+                            detay.get(0).minTemp!!.toDouble().toInt().toString() + "°"
                         )
                         binding.textViewtheTemp.setText(
-                            detay.get(0).theTemp!!.toDouble().toInt().toString()
+                            detay.get(0).theTemp!!.toDouble().toInt().toString() + "°"
                         )
                         ikonAlma(detay)
                     }
@@ -77,7 +77,7 @@ class ActivityDetay : AppCompatActivity() {
         })
     }
 
-   private fun ikonAlma(detay: ArrayList<Str>) =
+    private fun ikonAlma(detay: ArrayList<Str>) =
         when (detay.get(0).weatherStateAbbr) {
             "c" -> binding.imageView3.setImageResource(R.drawable.c)
             "sn" -> binding.imageView3.setImageResource(R.drawable.sn)

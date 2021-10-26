@@ -33,6 +33,21 @@ class RecylerViewAdapterDetay(list: ArrayList<Str>, context: Context) :
         val durum = itemView.findViewById<TextView>(R.id.row_durum)
         val ikon = itemView.findViewById<ImageView>(R.id.imageView5)
 
+        private fun durumAlma(detay: Str): String =
+            when (detay.weatherStateAbbr) {
+                "c" -> "Güneşli"
+                "sn" -> "Karlı"
+                "sl" -> "Yağmurla Kar"
+                "h" -> "Dolu"
+                "t" -> "Fırtına"
+                "hr" -> "Sağanak Yağışlı"
+                "lr" -> "Hafif Yağmur"
+                "s" -> "Güneş ve Yağmur"
+                "hc" -> "Bulutlu"
+                "lc" -> "Parçalı Bulutlu"
+                else -> "Güneşli"
+            }
+
         private fun ikonAlma(detay: Str): Int =
             when (detay.weatherStateAbbr) {
                 "c" -> R.drawable.c
@@ -50,10 +65,10 @@ class RecylerViewAdapterDetay(list: ArrayList<Str>, context: Context) :
 
         fun binding(list: Str) {
             day.setText(list.applicableDate)
-            temp.setText(list.theTemp?.toInt().toString())
-            max.setText("" + list.maxTemp?.toInt().toString())
-            min.setText("" + list.minTemp?.toInt().toString())
-            durum.setText(list.weatherStateAbbr)
+            temp.setText(list.theTemp?.toInt().toString() + "°")
+            max.setText("" + list.maxTemp?.toInt().toString() + "°")
+            min.setText("" + list.minTemp?.toInt().toString() + "°")
+            durum.setText(durumAlma(list))
             ikon.setImageResource(ikonAlma(list))
         }
 
