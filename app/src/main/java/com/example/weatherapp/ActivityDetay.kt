@@ -47,13 +47,14 @@ class ActivityDetay : AppCompatActivity() {
                 call: Call<Example>,
                 response: Response<Example>
             ) {
-                var list :List<Str>
+                var list: List<Str>
                 if (response.isSuccessful) {
                     response.body()?.let {
                         val detay: List<Str>? = it.consolidatedWeather
-                        var recylerViewDetay= findViewById<RecyclerView>(R.id.recylerViewDetay)
-                        recylerViewDetay.layoutManager=LinearLayoutManager(this@ActivityDetay)
-                        recylerViewDetay.adapter=RecylerViewAdapterDetay(detay as ArrayList<Str>,this@ActivityDetay)
+                        var recylerViewDetay = findViewById<RecyclerView>(R.id.recylerViewDetay)
+                        recylerViewDetay.layoutManager = LinearLayoutManager(this@ActivityDetay)
+                        recylerViewDetay.adapter =
+                            RecylerViewAdapterDetay(detay as ArrayList<Str>, this@ActivityDetay)
                         binding.detayTxtMax.setText(
                             detay.get(0).maxTemp!!.toDouble().toInt().toString()
                         )
@@ -63,19 +64,7 @@ class ActivityDetay : AppCompatActivity() {
                         binding.textViewtheTemp.setText(
                             detay.get(0).theTemp!!.toDouble().toInt().toString()
                         )
-                        when (detay.get(0).weatherStateAbbr) {
-                            "c" -> binding.imageView3.setImageResource(R.drawable.c)
-                            "sn" -> binding.imageView3.setImageResource(R.drawable.sn)
-                            "sl" -> binding.imageView3.setImageResource(R.drawable.sl)
-                            "h" -> binding.imageView3.setImageResource(R.drawable.h)
-                            "t" -> binding.imageView3.setImageResource(R.drawable.t)
-                            "hr" -> binding.imageView3.setImageResource(R.drawable.hr)
-                            "lr" -> binding.imageView3.setImageResource(R.drawable.lr)
-                            "s" -> binding.imageView3.setImageResource(R.drawable.s)
-                            "hc" -> binding.imageView3.setImageResource(R.drawable.hc)
-                            "lc" -> binding.imageView3.setImageResource(R.drawable.lc)
-                            else -> ""
-                        }
+                        ikonAlma(detay)
                     }
                 }
 
@@ -87,5 +76,20 @@ class ActivityDetay : AppCompatActivity() {
 
         })
     }
+
+   private fun ikonAlma(detay: ArrayList<Str>) =
+        when (detay.get(0).weatherStateAbbr) {
+            "c" -> binding.imageView3.setImageResource(R.drawable.c)
+            "sn" -> binding.imageView3.setImageResource(R.drawable.sn)
+            "sl" -> binding.imageView3.setImageResource(R.drawable.sl)
+            "h" -> binding.imageView3.setImageResource(R.drawable.h)
+            "t" -> binding.imageView3.setImageResource(R.drawable.t)
+            "hr" -> binding.imageView3.setImageResource(R.drawable.hr)
+            "lr" -> binding.imageView3.setImageResource(R.drawable.lr)
+            "s" -> binding.imageView3.setImageResource(R.drawable.s)
+            "hc" -> binding.imageView3.setImageResource(R.drawable.hc)
+            "lc" -> binding.imageView3.setImageResource(R.drawable.lc)
+            else -> ""
+        }
 
 }
