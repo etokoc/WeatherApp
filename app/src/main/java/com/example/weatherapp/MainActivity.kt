@@ -8,15 +8,17 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.RecylerView.RecylerViewAdapter
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import okhttp3.Dispatcher
+import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
 
@@ -82,7 +84,7 @@ class MainActivity : AppCompatActivity() {
             e.printStackTrace()
         }
     }
-    
+
 
     fun getWoeid(woeidD: String) {
         val retrofit = Retrofit.Builder()
@@ -101,29 +103,14 @@ class MainActivity : AppCompatActivity() {
                     response.body()?.let {
                         list = ArrayList(it)
                         for (x in list!!) {
-                            val recylerView: RecyclerView = findViewById(R.id.recyclerView)
 //                            val recylerViewAdapter = RecylerViewAdapter(
 //                                list!!,
 //                                x.title + "", x.max_temp, x.min_temp,
 //                                this@MainActivity.applicationContext
+                            Log.i("gola", ": " + list!!.get(0).title)
 //                            )
-
-                            val recylerViewAdapter = RecylerViewAdapter(
-                                list!!,
-                                x.title + "", this@MainActivity.applicationContext
-                            )
-
-                            recylerView.adapter = recylerViewAdapter
-                            recylerView.layoutManager = LinearLayoutManager(this@MainActivity)
+                            loadData(x.woeid)
                         }
-                        var apiConnect = ApiConnect()
-                        Log.i(
-                            "woeid alma",
-                            list!!.get(0).title + " woeid:" + list!!.get(0).woeid + " distance: " + list!!.get(
-                                0
-                            ).distance + " max:" +apiConnect.loadData(list!!.get(0).woeid)
-                        )
-//                        loadData(list!!.get(0).woeid)
                     }
                 }
                 Log.i("gandalf", "woeid: " + list!!.get(0).woeid)
@@ -134,5 +121,36 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    private var data: List<Str>? = null
+    var depo: Str? = Str()
+    fun loadData(woeidID: String): String {
+        lateinit var call: Call<Example>
+        lateinit var service: WeatherApi
+        lateinit var retrofit: Retrofit
+        retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        service = retrofit.create(WeatherApi::class.java)
+        call = service.queryWeather(woeidID)
+        call.enqueue(object : Callback<Example> {
+            override fun onResponse(call: Call<Example>, response: Response<Example>) {
+                if (response.isSuccessful) {
+                    data = response.body()!!.consolidatedWeather
+                    var recylerView: RecyclerView = findViewById(R.id.recyclerView)
+                    recylerView.adapter = RecylerViewAdapter(list!!, data, this@MainActivity)
+                    recylerView.layoutManager = LinearLayoutManager(this@MainActivity)
+                }
+            }
+
+            override fun onFailure(call: Call<Example>, t: Throwable) {
+                Log.i("response", "onFailure: " + t.message)
+            }
+
+        })
+        Log.i("depo", "loadData: " + depo!!.theTemp)
+        return depo!!.weatherStateName.toString()
     }
 }

@@ -6,43 +6,35 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.ActivityDetay
 import com.example.weatherapp.R
 import com.example.weatherapp.Str
 import com.example.weatherapp.WeatherModel
 
-class RecylerViewAdapter(list: ArrayList<WeatherModel>, title: String,/*maxTemp:String,minTemp:String,*/ context: Context) :
+class RecylerViewAdapter(list: ArrayList<WeatherModel>, data: List<Str>?, context: Context) :
     RecyclerView.Adapter<RecylerViewAdapter.MyViewHolder>() {
     var list: List<WeatherModel> = list
-
     init {
-        RecylerViewAdapter.title = title
-//        RecylerViewAdapter.maxTemp = maxTemp
-//        RecylerViewAdapter.minTemp = minTemp
         RecylerViewAdapter.list = list
+        RecylerViewAdapter.data = data!!
         RecylerViewAdapter.context = context
     }
 
     companion object {
-        lateinit var title: String
-//        lateinit var maxTemp: String
-//        lateinit var minTemp: String
         lateinit var list: List<WeatherModel>
+        lateinit var data: List<Str>
         lateinit var context: Context
 
     }
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val row_header = itemView.findViewById<TextView>(R.id.row_baslik)
-        val row_max = itemView.findViewById<TextView>(R.id.row_max)
-        val row_min = itemView.findViewById<TextView>(R.id.row_min)
+        val row_distance = itemView.findViewById<TextView>(R.id.row_distance)
 
-        fun binding(item: WeatherModel) {
-            row_header.setText(item.title)
-            row_max.setText(item.max_temp+"max")
-            row_min.setText(item.min_temp+"min")
+        fun binding(list: WeatherModel, title: String) {
+            row_header.setText(title)
+            row_distance.setText(((list.distance.toInt())/1000).toString()+" km")
         }
 
     }
@@ -55,13 +47,12 @@ class RecylerViewAdapter(list: ArrayList<WeatherModel>, title: String,/*maxTemp:
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.binding(list.get(position))
+        holder.binding(list.get(position), list.get(position).title)
+
         holder.itemView.setOnClickListener {
-            Toast.makeText(context,"Tıklandı"+" "+ list.get(position).title+" "+list.get(position).max_temp,Toast.LENGTH_SHORT).show()
-            val intent = Intent(it.context,ActivityDetay::class.java)
-            intent.putExtra("title",list.get(position).title)
-            intent.putExtra("temp",list.get(position).max_temp)
-            intent.putExtra("woeid",list.get(position).woeid)
+            val intent = Intent(it.context, ActivityDetay::class.java)
+            intent.putExtra("title", list.get(position).title)
+            intent.putExtra("woeid", list.get(position).woeid)
             it.context.startActivity(intent)
         }
     }
