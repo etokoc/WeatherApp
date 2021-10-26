@@ -1,4 +1,4 @@
-# **Weather App** uygulaması Kotlin dili kullanılarak geliştirilmiştir.<img src="https://user-images.githubusercontent.com/49747450/138936812-83485a84-f80c-438e-a2f4-ef3210329038.png" width:100 height = 100 />
+# **Weather App** uygulaması Kotlin dili kullanılarak geliştirilmiştir.<img src="https://user-images.githubusercontent.com/49747450/138936812-83485a84-f80c-438e-a2f4-ef3210329038.png" width:100 height = 100 align=right />
  **Kullanılan Api:** [https://www.metaweather.com/api/](url)
 ## Açıklama
 
