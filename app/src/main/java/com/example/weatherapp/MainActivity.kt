@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
     var list: ArrayList<WeatherModel>? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.decorView.systemUiVisibility= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
         setContentView(R.layout.activity_main)
 
         getPermission()

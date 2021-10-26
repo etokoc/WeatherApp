@@ -8,6 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.weatherapp.RecylerView.RecylerViewAdapterDetay
 import com.example.weatherapp.databinding.ActivityDetayBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -44,12 +47,13 @@ class ActivityDetay : AppCompatActivity() {
                 call: Call<Example>,
                 response: Response<Example>
             ) {
+                var list :List<Str>
                 if (response.isSuccessful) {
                     response.body()?.let {
                         val detay: List<Str>? = it.consolidatedWeather
-                        for (x in detay!!) {
-                            Log.i("response", "" + x.theTemp)
-                        }
+                        var recylerViewDetay= findViewById<RecyclerView>(R.id.recylerViewDetay)
+                        recylerViewDetay.layoutManager=LinearLayoutManager(this@ActivityDetay)
+                        recylerViewDetay.adapter=RecylerViewAdapterDetay(detay as ArrayList<Str>,this@ActivityDetay)
                         binding.detayTxtMax.setText(
                             detay.get(0).maxTemp!!.toDouble().toInt().toString()
                         )
