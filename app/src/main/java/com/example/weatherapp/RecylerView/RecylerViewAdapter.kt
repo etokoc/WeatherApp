@@ -9,10 +9,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.ActivityDetay
 import com.example.weatherapp.R
-import com.example.weatherapp.Str
+import com.example.weatherapp.WeatherTypes
 import com.example.weatherapp.WeatherModel
 
-class RecylerViewAdapter(list: ArrayList<WeatherModel>, data: List<Str>?, context: Context) :
+class RecylerViewAdapter(list: ArrayList<WeatherModel>, data: List<WeatherTypes>?, context: Context) :
     RecyclerView.Adapter<RecylerViewAdapter.MyViewHolder>() {
     var list: List<WeatherModel> = list
     init {
@@ -23,7 +23,7 @@ class RecylerViewAdapter(list: ArrayList<WeatherModel>, data: List<Str>?, contex
 
     companion object {
         lateinit var list: List<WeatherModel>
-        lateinit var data: List<Str>
+        lateinit var data: List<WeatherTypes>
         lateinit var context: Context
 
     }

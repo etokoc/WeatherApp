@@ -9,9 +9,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.*
 
-class RecylerViewAdapterDetay(list: ArrayList<Str>, context: Context) :
+class RecylerViewAdapterDetay(list: ArrayList<WeatherTypes>, context: Context) :
     RecyclerView.Adapter<RecylerViewAdapterDetay.MyViewHolder>() {
-    var list: List<Str> = list
+    var list: List<WeatherTypes> = list
 
     init {
         RecylerViewAdapterDetay.list = list
@@ -19,8 +19,8 @@ class RecylerViewAdapterDetay(list: ArrayList<Str>, context: Context) :
     }
 
     companion object {
-        lateinit var list: List<Str>
-        lateinit var data: List<Str>
+        lateinit var list: List<WeatherTypes>
+        lateinit var data: List<WeatherTypes>
         lateinit var context: Context
 
     }
@@ -33,7 +33,7 @@ class RecylerViewAdapterDetay(list: ArrayList<Str>, context: Context) :
         val durum = itemView.findViewById<TextView>(R.id.row_durum)
         val ikon = itemView.findViewById<ImageView>(R.id.imageView5)
 
-        private fun durumAlma(detay: Str): String =
+        private fun durumAlma(detay: WeatherTypes): String =
             when (detay.weatherStateAbbr) {
                 "c" -> "Güneşli"
                 "sn" -> "Karlı"
@@ -48,7 +48,7 @@ class RecylerViewAdapterDetay(list: ArrayList<Str>, context: Context) :
                 else -> "Güneşli"
             }
 
-        private fun ikonAlma(detay: Str): Int =
+        private fun ikonAlma(detay: WeatherTypes): Int =
             when (detay.weatherStateAbbr) {
                 "c" -> R.drawable.c
                 "sn" -> R.drawable.sn
@@ -63,7 +63,7 @@ class RecylerViewAdapterDetay(list: ArrayList<Str>, context: Context) :
                 else -> 0
             }
 
-        fun binding(list: Str) {
+        fun binding(list: WeatherTypes) {
             day.setText(list.applicableDate)
             temp.setText(list.theTemp?.toInt().toString() + "°")
             max.setText("" + list.maxTemp?.toInt().toString() + "°")

@@ -49,12 +49,12 @@ class ActivityDetay : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     response.body()?.let {
-                        val detay: MutableList<Str>? = it.consolidatedWeather as MutableList<Str>?
+                        val detay: MutableList<WeatherTypes>? = it.consolidatedWeather as MutableList<WeatherTypes>?
                         detay!!.removeAt(0)
                         var recylerViewDetay = findViewById<RecyclerView>(R.id.recylerViewDetay)
                         recylerViewDetay.layoutManager = LinearLayoutManager(this@ActivityDetay)
                         recylerViewDetay.adapter =
-                            RecylerViewAdapterDetay(detay as ArrayList<Str>, this@ActivityDetay)
+                            RecylerViewAdapterDetay(detay as ArrayList<WeatherTypes>, this@ActivityDetay)
                         binding.detayTxtMax.setText(
                             detay.get(0).maxTemp!!.toDouble().toInt().toString() + "°"
                         )
@@ -77,7 +77,7 @@ class ActivityDetay : AppCompatActivity() {
         })
     }
 
-    private fun ikonAlma(detay: ArrayList<Str>) =
+    private fun ikonAlma(detay: ArrayList<WeatherTypes>) =
         when (detay.get(0).weatherStateAbbr) {
             "c" -> binding.imageView3.setImageResource(R.drawable.c)
             "sn" -> binding.imageView3.setImageResource(R.drawable.sn)

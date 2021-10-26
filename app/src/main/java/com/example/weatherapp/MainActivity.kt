@@ -117,8 +117,8 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private var data: List<Str>? = null
-    var depo: Str? = Str()
+    private var data: List<WeatherTypes>? = null
+    var depo: WeatherTypes? = WeatherTypes()
     fun loadData(woeidID: String): String {
         lateinit var call: Call<Example>
         lateinit var service: WeatherApi
