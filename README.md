@@ -25,7 +25,7 @@
 3. Cihazın yakın olduğu lokasyonları listeler.
 4. Her lokasyonun 5 günlük hava tahmini gösterilir.
 
-##Uygulamadan Görüntüler
+## Uygulamadan Görüntüler
 
 <table>
 <tr><td>
