@@ -2,23 +2,17 @@ package com.example.weatherapp
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.RecylerView.RecylerViewAdapter
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import okhttp3.Dispatcher
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -26,8 +20,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MainActivity : AppCompatActivity() {
     lateinit var fusedLocationClient: FusedLocationProviderClient
     private val BASE_URL = "https://www.metaweather.com"
+    val REQUEST_CODE = 123
 
-    private lateinit var cs: String
+    private lateinit var latt_long: String
     var list: ArrayList<WeatherModel>? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,21 +44,29 @@ class MainActivity : AppCompatActivity() {
                 this,
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            requestPermissions(arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), 123)
-        } else {
+        )
+        else {
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-                cs = location.latitude.toString() + "," + location.longitude
-                Log.i(
-                    "veri",
-                    "fonksiyon içi: " + location.latitude.toString() + "," + location.longitude
-                )
-                Log.i("cs", "cs: " + cs)
-                getWoeid(cs)
+                latt_long = location.latitude.toString() + "," + location.longitude
+                getWoeid(latt_long)
             }
         }
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getLocation()
+            }
+        } else {
+            requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE)
+        }
+    }
 
     private fun getPermission() {
         try {
@@ -101,17 +104,10 @@ class MainActivity : AppCompatActivity() {
                     response.body()?.let {
                         list = ArrayList(it)
                         for (x in list!!) {
-//                            val recylerViewAdapter = RecylerViewAdapter(
-//                                list!!,
-//                                x.title + "", x.max_temp, x.min_temp,
-//                                this@MainActivity.applicationContext
-                            Log.i("gola", ": " + list!!.get(0).title)
-//                            )
                             loadData(x.woeid)
                         }
                     }
                 }
-                Log.i("gandalf", "woeid: " + list!!.get(0).woeid)
             }
 
             override fun onFailure(call: Call<List<WeatherModel>>, t: Throwable) {
@@ -148,7 +144,6 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
-        Log.i("depo", "loadData: " + depo!!.theTemp)
         return depo!!.weatherStateName.toString()
     }
 }
