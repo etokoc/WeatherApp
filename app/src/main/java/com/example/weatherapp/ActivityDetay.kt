@@ -50,8 +50,28 @@ class ActivityDetay : AppCompatActivity() {
                         for (x in detay!!) {
                             Log.i("response", "" + x.theTemp)
                         }
-                        binding.detayTxtMax.setText(detay.get(0).maxTemp!!.toDouble().toInt().toString())
-                        binding.detayTxtMin.setText(detay.get(0).minTemp!!.toDouble().toInt().toString())
+                        binding.detayTxtMax.setText(
+                            detay.get(0).maxTemp!!.toDouble().toInt().toString()
+                        )
+                        binding.detayTxtMin.setText(
+                            detay.get(0).minTemp!!.toDouble().toInt().toString()
+                        )
+                        binding.textViewtheTemp.setText(
+                            detay.get(0).theTemp!!.toDouble().toInt().toString()
+                        )
+                        when (detay.get(0).weatherStateAbbr) {
+                            "c" -> Log.i("rasim", "Güneşli")
+                            "sn" -> Log.i("rasim", "Karlı")
+                            "sl" -> Log.i("rasim", "Karla Karışık Yağmur")
+                            "h" -> Log.i("rasim", "Dolu Yağışı")
+                            "t" -> Log.i("rasim", "Fırtınalı")
+                            "hr" -> Log.i("rasim", "Sağanak Yağışlı")
+                            "lr" -> Log.i("rasim", "Hafif Yağmurlu")
+                            "s" -> Log.i("rasim", "Hafif Sağanak Yağışlı")
+                            "hc" -> Log.i("rasim", "Bulutlu")
+                            "lc" -> Log.i("rasim", "Parçalı Bulutlu")
+                            else -> ""
+                        }
                     }
                 }
 
