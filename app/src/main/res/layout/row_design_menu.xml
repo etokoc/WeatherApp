@@ -7,7 +7,8 @@
     android:layout_marginLeft="10dp"
     android:layout_marginTop="5dp"
     android:layout_marginRight="10dp"
-    android:background="@drawable/rectangle">
+    android:background="@drawable/rectangle"
+    android:elevation="1dp">
 
     <ImageView
         android:layout_width="34dp"

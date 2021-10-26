@@ -4,19 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ActivityDetay"
-    android:background="#7281D1">
+    android:background="#FFFF"
+    tools:context=".ActivityDetay">
 
     <TextView
         android:id="@+id/detay_txt_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="10dp"
         android:text="Ankara"
         android:textSize="46sp"
-        app:layout_constraintEnd_toStartOf="@+id/detay_image"
-        app:layout_constraintHorizontal_bias="1.0"
+        android:layout_margin="30dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
